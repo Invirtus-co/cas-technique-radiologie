@@ -30,7 +30,6 @@ git clone <votre dépôt privé>     # voir « Démarrer » ci-dessous
 cd <votre dépôt>
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-# placez le dossier donnees/ (reçu par lien privé) à la racine du dépôt
 jupyter notebook usecase_radiologie_candidat.ipynb
 ```
 
@@ -38,7 +37,7 @@ Au premier lancement, les poids ImageNet de l'encodeur sont téléchargés depui
 
 ## 📁 Données
 
-Les données **ne sont pas dans ce dépôt**. Vous les recevez par **lien privé** avec votre invitation : un dossier `donnees/` à placer à la racine.
+Les données sont **incluses dans ce dépôt**, dans le dossier `donnees/` : rien à télécharger.
 
 ```
 donnees/
@@ -51,7 +50,7 @@ donnees/
 └── labels_radiologue.csv              labels posés par un radiologue (sous-ensemble)
 ```
 
-> ⚠️ **Données de santé pseudonymisées, confidentielles, transmises uniquement pour ce test.** Ne les redistribuez pas, **ne les committez jamais** (`donnees/` est dans le `.gitignore`), et supprimez-les après le débrief.
+> ⚠️ **Données de santé pseudonymisées, confidentielles, transmises uniquement pour ce test.** Ne les redistribuez pas et ne les réutilisez pas en dehors de ce test ; supprimez-les après le débrief.
 
 ---
 
