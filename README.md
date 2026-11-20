@@ -9,6 +9,37 @@ Une startup veut détecter des anomalies sur des radiographies du thorax et pré
 - gestion de **vues multiples** et de **données cliniques partielles** ;
 - **fusion bayésienne** des sorties image, des dépendances entre pathologies et de la clinique.
 
+### Architecture envisagée par le client
+
+```mermaid
+flowchart TD
+    RADIO["Radiographie<br/>DICOM ~2K px → JPG"]
+    VUES["Incidences multiples<br/>Face PA/AP + Profil<br/><i>(parfois absentes)</i>"]
+    CLIN["Métadonnées + données cliniques<br/><i>(partielles)</i>"]
+    PREP["Prétraitement<br/>Redimensionnement 512 → ~724 px"]
+    CNN["Encodeur image<br/>CNN / Transformer"]
+    RADIO --> PREP
+    VUES --> PREP
+    PREP --> CNN
+    N1{"Niveau 1<br/>Anomalie ?<br/>cible ≈ 97 %"}
+    CNN --> N1
+    N1 -- NON --> CRN["CR : « normal »"]
+    N1 -- OUI --> N2["Niveau 2"]
+    N2 --> PN["PN : pathologies nommées<br/>13 pathologies<br/>classement ①, ②…"]
+    N2 --> PNN["PNN : cas incertain<br/>« peut-être » pneumo, nodule…"]
+    PNN --> CRR["CR revu par le médecin"]
+    PN --> BN["Fusion bayésienne<br/>dépendances entre pathologies<br/>ex. nodule ↔ pneumonie"]
+    CLIN --> BN
+    BN --> OUT["Sortie multi-label probabiliste<br/>95 % pneumonie<br/>90 % nodule<br/>…"]
+    OUT --> CRG["Ébauche de CR<br/>(aide à la relecture)"]
+    classDef ok fill:#e8f5e9,stroke:#2e7d32,color:#1b5e20
+    classDef warn fill:#fff3e0,stroke:#ef6c00,color:#e65100
+    classDef key fill:#e3f2fd,stroke:#1565c0,color:#0d47a1
+    class CRN ok
+    class PNN,CRR warn
+    class N1,BN key
+```
+
 L'énoncé complet est dans **`usecase_radiologie_candidat.ipynb`**.
 
 > **Ce qui est évalué :** la rigueur et la justification de votre démarche, bien plus que le score final.
