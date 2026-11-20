@@ -1,3 +1,4 @@
+donnees/
 # Données : ne JAMAIS les committer (taille + licence)
 data/
 cache/

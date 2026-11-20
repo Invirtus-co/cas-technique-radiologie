@@ -23,34 +23,35 @@ L'énoncé complet est dans **`usecase_radiologie_candidat.ipynb`**.
 
 ## 💻 Installation
 
-Python 3.10+ requis. Un GPU n'est **pas** nécessaire : le notebook a un **mode rapide** (par défaut) qui tourne sur un portable en CPU.
+Python 3.10+ requis. Un GPU n'est **pas** nécessaire : tout le notebook tourne en moins de 5 minutes sur un portable.
 
 ```bash
 git clone <votre dépôt privé>     # voir « Démarrer » ci-dessous
 cd <votre dépôt>
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-./scripts/telecharger_donnees.sh       # ~1,4 Go -> ./data
+# placez le dossier donnees/ (reçu par lien privé) à la racine du dépôt
 jupyter notebook usecase_radiologie_candidat.ipynb
 ```
 
-Au premier lancement, les poids ImageNet de l'encodeur sont téléchargés depuis Hugging Face (~30 Mo) et les embeddings sont calculés puis mis en cache dans `./cache` : comptez quelques minutes en mode rapide, plus en mode complet.
+Au premier lancement, les poids ImageNet de l'encodeur sont téléchargés depuis Hugging Face (~30 Mo) et les embeddings sont mis en cache dans `./cache`.
 
 ## 📁 Données
 
-**Indiana University Chest X-ray Collection**, diffusée par la National Library of Medicine (OpenI). Licence **CC BY-NC-ND 4.0**. Données anonymisées.
+Les données **ne sont pas dans ce dépôt**. Vous les recevez par **lien privé** avec votre invitation : un dossier `donnees/` à placer à la racine.
 
 ```
-data/
-├── ecgen-radiology/   3 955 comptes rendus XML (1 par examen)
-│   └── 1.xml          INDICATION, COMPARISON, FINDINGS, IMPRESSION, tags MeSH, liste des images
-└── png/               ~7 470 radiographies PNG (face et profil), nommées par identifiant d'image
-    └── CXR1_1_IM-0001-3001.png
+donnees/
+├── examens.csv                        1 ligne par examen (patient, date, fichier du CR, label radiologue oui/non)
+├── images.csv                         1 ligne par image + métadonnées DICOM (vue, orientation…) partielles
+├── images/                            radiographies JPG
+├── comptes_rendus/                    1 compte rendu .txt par examen (anglais)
+├── labels_automatiques_chexpert.csv   labels extraits automatiquement (CheXpert labeler)
+├── labels_automatiques_negbio.csv     labels extraits automatiquement (NegBio)
+└── labels_radiologue.csv              labels posés par un radiologue (sous-ensemble)
 ```
 
-- Le **lien examen ↔ images** est donné dans chaque XML (`<parentImage id="...">`).
-- **Il n'y a ni label de vue (face / profil), ni identifiant patient, ni âge** (masqué par l'anonymisation « XXXX »). Cela fait partie du problème.
-- ⚠️ **Ne committez jamais les données** : le dossier `data/` est déjà dans le `.gitignore`.
+> ⚠️ **Données de santé pseudonymisées, confidentielles, transmises uniquement pour ce test.** Ne les redistribuez pas, **ne les committez jamais** (`donnees/` est dans le `.gitignore`), et supprimez-les après le débrief.
 
 ---
 
@@ -95,6 +96,3 @@ C'est tout : l'invitation vaut rendu, et vous n'avez pas besoin d'envoyer de mai
 
 Si quelque chose bloque (téléchargement, installation), écrivez à l'adresse indiquée dans votre mail d'invitation. Pour les questions de fond, **faites un choix, notez-le dans le notebook et justifiez-le** : cela fait partie de l'exercice.
 
----
-
-*Données : Demner-Fushman D. et al., « Preparing a collection of radiology examinations for distribution and retrieval », JAMIA 2016. Indiana University / National Library of Medicine, licence CC BY-NC-ND 4.0.*
